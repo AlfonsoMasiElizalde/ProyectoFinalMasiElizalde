@@ -9,8 +9,6 @@ const ItemDetail = ({producto}) => {
 
   const [isCount, setIsCount] = useState(true)
 
-  // const [ loading, setLoading ] = useState(true)
-
   const { agregarCarrito } = usarCartContext()
 
   const onAdd = (cant)=>{
@@ -19,10 +17,6 @@ const ItemDetail = ({producto}) => {
   }
 
   return (
-    // loading
-    // ?
-    //   <Cargando />
-    // :
     <div className="card-detail-container">
       <div className="card-detail">
         <img src={producto.imagen} alt={producto.descripcion} />

@@ -1,6 +1,3 @@
-import { addDoc, collection, doc, getFirestore, updateDoc } from "firebase/firestore"
-import { useState } from "react"
-
 import { usarCartContext } from "../context/CartContext"
 import CartProductsList from "./CartProductsList"
 import FormInput from "./Form"
@@ -11,7 +8,7 @@ const CartContainer = () => {
 
   return (
     <div className="cart-container">
-      
+
       <CartProductsList />
 
       <h3>{precioTotal() !== 0 && `El precio total es: $ ${precioTotal()}`}</h3>

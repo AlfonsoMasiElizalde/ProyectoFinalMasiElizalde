@@ -5,6 +5,8 @@ import { usarCartContext } from "../context/CartContext"
 
 const FormInput = () => {
 
+    const [ idOrder, setIdOrder ] = useState("")
+
     const { cartList, vaciarCarrito, precioTotal } = usarCartContext()
 
     const [formData, setFormData] = useState({
@@ -12,26 +14,25 @@ const FormInput = () => {
         apellido: "",
         telefono: "",
         email: "",
-        contraseña: ""
-    
+        repetirEmail: ""
     })
 
     const insertarCompra = (evt) => {
 
         evt.preventDefault()
 
-        const compra = {}
-        compra.comprador = formData
-        compra.isActive = true
-        compra.items = cartList.map( ({id, descripcion, precio, cantidad}) => ({id, descripcion, precio, cantidad}) )
-        compra.total = precioTotal()
+        const order = {}
+        order.comprador = formData
+        order.isActive = true
+        order.items = cartList.map( ({id, descripcion, precio, cantidad}) => ({id, descripcion, precio, cantidad}) )
+        order.total = precioTotal()
 
         const db = getFirestore()
         
-        const comprasCollection = collection(db, "compras")
+        const ordersCollection = collection(db, "compras")
 
-        addDoc(comprasCollection, compra)
-        .then(resp => console.log(resp))
+        addDoc(ordersCollection, order)
+        .then(resp => setIdOrder(resp.id))
         .catch(err => console.log(err))
         .finally(()=> {
             vaciarCarrito()
@@ -40,12 +41,12 @@ const FormInput = () => {
                 apellido: "",
                 telefono: "",
                 email: "",
-                contraseña: ""
+                repetirEmail: ""
             })
         })
 
     }
-
+    
     const handleOnChange = (evt) => {
         setFormData({
           ...formData,
@@ -53,22 +54,29 @@ const FormInput = () => {
         })
     }
 
-    return <form onSubmit={insertarCompra} className="cart-form">
+    return (
+        <div>
 
-        <input type="text" name="nombre" placeholder="Ingrese su Nombre" onChange={handleOnChange} value={formData.nombre} className="form-data-input" required/>
+            {idOrder !== "" && <h3>Su compra ha sido exitosa! Su ID de compra es: {idOrder}</h3>}
 
-        <input type="text" name="apellido" placeholder="Ingrese su Apellido" onChange={handleOnChange} value={formData.apellido} className="form-data-input" required/>
+            <form onSubmit={insertarCompra} className="cart-form">
 
-        <input type="text" name="telefono" placeholder="Ingrese su Telefono" onChange={handleOnChange} value={formData.telefono} className="form-data-input" required/>
+                <input type="text" name="nombre" placeholder="Ingrese su Nombre" onChange={handleOnChange} value={formData.nombre} className="form-data-input" required/>
 
-        <input type="email" name="email" placeholder="Ingrese su Email" onChange={handleOnChange} value={formData.email} className="form-data-input" required/>
+                <input type="text" name="apellido" placeholder="Ingrese su Apellido" onChange={handleOnChange} value={formData.apellido} className="form-data-input" required/>
 
-        <input type="password" name="contraseña" placeholder="Ingrese una contraseña" onChange={handleOnChange} value={formData.contraseña} className="form-data-input" required/>
+                <input type="text" name="telefono" placeholder="Ingrese su Telefono" onChange={handleOnChange} value={formData.telefono} className="form-data-input" required/>
 
-        <button type="submit" className="button-style-compra">Generar la compra</button>
+                <input type="email" name="email" placeholder="Ingrese su Email" onChange={handleOnChange} value={formData.email} className="form-data-input" required/>
 
-    </form>
-  
+                <input type="email" name="repetirEmail" placeholder="Ingrese nuevamente su Email" onChange={handleOnChange} value={formData.repetirEmail} className="form-data-input" required/>
+
+                <button type="submit" className="button-style-compra">Generar la compra</button>
+
+            </form>
+
+        </div>
+    )
 }
 
 export default FormInput
