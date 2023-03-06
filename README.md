@@ -9,3 +9,5 @@ Las dependencias que uso en este proyecto son:
 -React-dom
 
 -React-router-dom
+
+Link al deploy: https://effulgent-frangipane-2d8981.netlify.app/
